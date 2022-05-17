@@ -191,6 +191,12 @@ if (budy.includes('https://chat.whatsapp.com/')) {
       if (db.chats[m.chat].mute && !isAdmins && !isCreator) {
       return
       }
+      
+//[public/self]\\
+        if (!elaina.public) {
+            if (!m.key.fromMe) return
+        }
+        
 //[write database every 1min]\\
 	setInterval(() => {
             fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
@@ -624,12 +630,18 @@ Please @${m.mentionedJid[0].split`@`[0]} to type accept/reject`
                 }
             }
             break
-            case 'halahkdkdkd': case 'hilihdkksls': case 'huluhkdksls': case 'helehkdkdkd': case 'holohkdkskks': //this is in indonesian so if u want to activate u can but will be in indonesian (thanks to respected creator of this case)
-            if (!m.quoted && !text) throw `Send/reply text with caption ${prefix + command}`
-            ter = command[1].toLowerCase()
-            tex = m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text
-            reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
+ case 'public': {
+                if (!isCreator) throw mess.owner
+                elaina.public = true
+                reply('Successfully Changed To Public Usage')
+            }
             break
+            case 'self': {
+                if (!isCreator) throw mess.owner
+                elaina.public = false
+                reply('Successfully Changed To Self Usage')
+            }
+            break           
             case 'tebakjxkzkossihdhdidii': { //this is in indonesian so if u want to activate u can but will be in indonesian (thanks to respected creator of this case)
                 if (!text) throw `Example : ${prefix + command} lagu\n\nOption : \n1. music\n2. picture\n3. word\n4. sentence\n5. lyrics\n6.rice cake`
                 if (args[0] === "lagu") {
@@ -874,28 +886,8 @@ case 'sadboy':{
                      elaina.sendButtonText(m.chat, buttons, mty, klarifikasi, m, {mentions: ments})
 }
 break
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            case 'join': {
+        case 'join': {
+             
                 if (!text) throw 'Enter the group link!'
                 if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) throw 'Link Invalid!'
                 replay(mess.wait)
@@ -3063,7 +3055,6 @@ break
   > ${prefix}tiktok [url]
   > ${prefix}tiktokmp3 [url]
   > ${prefix}instagram [url]
-  > ${prefix}ig2 [url]
   > ${prefix}igreels [url]
   > ${prefix}igtv [url]
   > ${prefix}twitter [url]
@@ -3089,7 +3080,7 @@ break
   > ${prefix}quoteanime
   
   *( 🎲 )  Fun Menu*  
-> ${prefix}family100
+  > ${prefix}family100
   > ${prefix}math [mode] 
   > ${prefix}jadian
   > ${prefix}jodohku
