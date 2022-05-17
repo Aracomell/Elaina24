@@ -1334,7 +1334,7 @@ break
                                     url: 'https://s.id/Skylarkaf'
                                 }                            
                             }]
-                      fatihgans = getBuffer (global.broadcast)
+                      fatihgans = fs.readFileSync('./Media/broadcast.jpg')
                       let txt = `「 elaina Broadcast 」\n\n${text}`
                       elaina.send5ButImg(i, txt, elaina.user.name, fatihgans, btn)
                     }

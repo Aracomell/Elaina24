@@ -1,5 +1,4 @@
 /*
-═══════[© 2022 nexusNw Inc.]════════
 
 cr: asta by nexusNw inc.
 
@@ -20,7 +19,6 @@ global.APIKeys = {
 
 global.gifmp4 = "https://uploader.caliph.my.id/file/BrHI7RTQI2.mp4"
 global.menuimg = "https://uploader.caliph.my.id/file/mNV5rMkeoE.jpg"
-global.broadcast = "https://uploader.caliph.my.id/file/87f6u2IZRc.jpg"
 global.owner = ['6282331660134'] 
 global.pemilik = ['6282331660134'] //another owner number
 global.premium = ['6282331660134']

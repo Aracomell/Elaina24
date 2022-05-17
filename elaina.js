@@ -133,10 +133,7 @@ try {
             console.error(err)
         }
 
-//[public/self]\\
-        if (!elaina.public) {
-            if (!m.key.fromMe) return
-        }
+
         
 if (m.message) {
             elaina.sendReadReceipt(m.chat, m.sender, [m.key.id])
@@ -2270,19 +2267,7 @@ case 'sendkontak': case 'sendcontact': {
                     await elaina.sendButtonText(m.chat, buttons, `\`\`\`Please wait, looking for a partner\`\`\``, elaina.user.name, m)
                 }
                 break
-            }
-            case 'public': {
-                if (!isCreator) throw mess.owner
-                elaina.public = true
-                reply('Successfully Changed To Public Usage')
-            }
-            break
-            case 'self': {
-                if (!isCreator) throw mess.owner
-                elaina.public = false
-                reply('Successfully Changed To Self Usage')
-            }
-            break
+            }                    
             case 'ping': case 'speed': {
                 const used = process.memoryUsage()
                 const cpus = os.cpus().map(cpu => {
