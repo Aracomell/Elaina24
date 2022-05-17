@@ -76,9 +76,9 @@ async function startelaina() {
 let nama = await elaina.getName(num)
 memb = metadata.participants.length
 
-Kon = await getBuffer(`https://hardianto.xyz/api/tools/welcomer?nama=${encodeURIComponent(nama)}&namaGb=${encodeURIComponent(metadata.subject)}&pepeGb=${encodeURIComponent(ppgroup)}&totalMem=${encodeURIComponent(memb)}&pepeUser=${encodeURIComponent(ppuser)}&bege=https://uploader.caliph.my.id/file/fzzWnI91xt.jpg&apikey=hardianto`)
+Kon = await getBuffer(`https://hardianto.xyz/api/tools/welcomer?nama=${encodeURIComponent(nama)}&namaGb=${encodeURIComponent(metadata.subject)}&pepeGb=${encodeURIComponent(ppgroup)}&totalMem=${encodeURIComponent(memb)}&pepeUser=${encodeURIComponent(ppuser)}&bege=https://uploader.caliph.my.id/file/6HEPlOvA0M.jpg&apikey=hardianto`)
 
-Tol = await getBuffer(`https://hardianto.xyz/api/tools/leave?nama=${encodeURIComponent(nama)}&namaGb=${encodeURIComponent(metadata.subject)}&pepeGb=${encodeURIComponent(ppgroup)}&totalMem=${encodeURIComponent(memb)}&pepeUser=${encodeURIComponent(ppuser)}&bege=https://uploader.caliph.my.id/file/fzzWnI91xt.jpg&apikey=hardianto`)    
+Tol = await getBuffer(`https://hardianto.xyz/api/tools/leave?nama=${encodeURIComponent(nama)}&namaGb=${encodeURIComponent(metadata.subject)}&pepeGb=${encodeURIComponent(ppgroup)}&totalMem=${encodeURIComponent(memb)}&pepeUser=${encodeURIComponent(ppuser)}&bege=https://uploader.caliph.my.id/file/6HEPlOvA0M.jpg&apikey=hardianto`)    
                    
                    if (anu.action == 'add') {
                     elaina.sendMessage(anu.id, { image: Kon, contextInfo: { mentionedJid: [num] }, caption: `Welcome To ${metadata.subject} @${num.split("@")[0]}
