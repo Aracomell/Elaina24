@@ -30,6 +30,95 @@ const speedofbot = require("performance-now")
 // ./database
 const antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 
+//rpg function\\
+   const { 
+     addInventoriDarah, 
+      cekDuluJoinAdaApaKagaDiJson, 
+      addDarah, 
+      kurangDarah, 
+     getDarah 
+   }  = require('./src/darah.js')
+   const { 
+     cekInventoryAdaAtauGak, 
+      addInventori,  
+       addBesi, 
+       addEmas, 
+       addEmerald,
+       addUmpan,
+       addPotion,
+       kurangBesi, 
+       kurangEmas, 
+       kurangEmerald, 
+       kurangUmpan,
+       kurangPotion,
+       getBesi, 
+      getEmas, 
+     getEmerald,
+     getUmpan,
+    getPotion
+   } = require('./src/alat_tukar.js')
+   const { 
+    addInventoriMonay, 
+    cekDuluJoinAdaApaKagaMonaynyaDiJson, 
+    addMonay, 
+    kurangMonay, 
+   getMonay 
+   } = require('./src/monay.js')
+   const { 
+    addInventoriLimit, 
+    cekDuluJoinAdaApaKagaLimitnyaDiJson, 
+    addLimit, 
+    kurangLimit, 
+    getLimit 
+   } = require('./src/limit.js')
+   const { 
+    cekDuluHasilBuruanNya, 
+     addInventoriBuruan, 
+     addIkan,
+      addAyam, 
+      addKelinci, 
+      addDomba, 
+      addSapi,
+      addGajah,
+      kurangIkan,
+      kurangAyam, 
+      kurangKelinci, 
+      kurangDomba, 
+      kurangSapi,
+      kurangGajah,
+      getIkan,
+      getAyam, 
+      getKelinci, 
+      getDomba,
+     getSapi,
+    getGajah
+   } = require('./src/buruan.js')
+   let DarahAwal =  global.rpg.darahawal
+   const isDarah = cekDuluJoinAdaApaKagaDiJson(m.sender)   
+   const isCekDarah = getDarah(m.sender)
+   const isUmpan = getUmpan(m.sender)
+   const isPotion = getPotion(m.sender)
+   const isIkan = getIkan(m.sender)
+   const isAyam = getAyam(m.sender)
+   const isKelinci = getKelinci(m.sender)
+   const isDomba = getDomba(m.sender)
+   const isSapi = getSapi(m.sender)
+   const isGajah = getGajah(m.sender)
+   const isMonay = getMonay(m.sender)
+   const isLimit = getLimit(m.sender)
+   const isBesi = getBesi(m.sender)
+   const isEmas = getEmas(m.sender)
+   const isEmerald = getEmerald(m.sender)
+   const isInventory = cekInventoryAdaAtauGak(m.sender)
+   const isInventoriBuruan = cekDuluHasilBuruanNya(m.sender)
+   const isInventoryLimit = cekDuluJoinAdaApaKagaLimitnyaDiJson(m.sender)
+   const isInventoryMonay = cekDuluJoinAdaApaKagaMonaynyaDiJson(m.sender)
+   const ikan = ['🐟','🐠','🐡']   
+
+//rpg database\\
+let _buruan = JSON.parse(fs.readFileSync('./src/hasil_buruan.json'));
+let _darahOrg = JSON.parse(fs.readFileSync('./src/darah.json'))
+
 // database reader
 global.db = JSON.parse(fs.readFileSync('./src/database.json'))
 if (global.db) global.db = {
@@ -41,9 +130,8 @@ if (global.db) global.db = {
     chats: {},
     ...(global.db || {})
 }
-//AutosetBio
 
-	
+
 let tebaklagu = db.game.tebaklagu = []
 let _family100 = db.game.family100 = []
 let kuismath = db.game.math = []
@@ -131,16 +219,12 @@ try {
         }
         } catch (err) {
             console.error(err)
-        }
-
-
+        } 
         
 if (m.message) {
             elaina.sendReadReceipt(m.chat, m.sender, [m.key.id])
-            console.log(chalk.black(chalk.bgYellow('[ MSG 🐧 ]')), chalk.black(chalk.bgWhite(budy || m.mtype)) + '\n' + chalk.blue('>'), chalk.green(m.isGroup ? pushname : 'Private', m.chat))
+            console.log(chalk.black(chalk.bgYellow('[ MSG ]')), chalk.black(chalk.bgWhite(budy || m.mtype)) + '\n' + chalk.blue('>'), chalk.green(m.isGroup ? pushname : 'Private', m.chat))
         }
-
-
 
 //[level(incomplete, still in devment)]\\
 const levelRole = getLevelingLevel(m.sender)
@@ -197,10 +281,6 @@ if (budy.includes('https://chat.whatsapp.com/')) {
             if (!m.key.fromMe) return
         }
         
-//[write database every 1min]\\
-	setInterval(() => {
-            fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
-        }, 60 * 1000)
 
 //[reset limit every 12hrs]\\
         let cron = require('node-cron')
@@ -981,12 +1061,65 @@ break
                 reply(mess.success)
                 }
                 break
+case 'stalker': case 'stalk': {
+		if (!isPremium && global.db.data.users[m.sender].limit < 1) return reply('Your Daily Limit Has Expired')
+                if (!text) return reply(`Example : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
+                let [type, id, zone] = args
+                if (type.toLowerCase() == 'ff') {
+                    if (!id) return reply(`No Query id, Example ${prefix + command} ff 552992060`)
+                    let anu = await fetchJson(api('zenz', '/api/nickff', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'ml') {
+                    if (!id) return reply(`No Query id, Example : ${prefix + command} ml 214885010 2253`)
+                    if (!zone) return reply(`No Query id, Example : ${prefix + command} ml 214885010 2253`)
+                    let anu = await fetchJson(api('zenz', '/api/nickml', { apikey: global.APIKeys[global.APIs['zenz']], query: id, query2: zone }))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`ID : ${anu.result.gameId}\nZone : ${anu.result.zoneId}\nUsername : ${anu.result.userName}`)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'aov') {
+                    if (!id) return reply(`No Query id, Example ${prefix + command} aov 293306941441181`)
+                    let anu = await fetchJson(api('zenz', '/api/nickaov', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'cod') {
+                    if (!id) return reply(`No Query id, Example ${prefix + command} cod 6290150021186841472`)
+                    let anu = await fetchJson(api('zenz', '/api/nickcod', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'pb') {
+                    if (!id) return reply(`No Query id, Example ${prefix + command} pb riio46`)
+                    let anu = await fetchJson(api('zenz', '/api/nickpb', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'ig') {
+                    if (!id) return reply(`No Query username, Example : ${prefix + command} ig josephxeon13`)
+                    let { result: anu } = await fetchJson(api('zenz', '/api/stalker/ig', { username: id }, 'apikey'))
+                    if (anu.status == false) return reply(anu.result.message)
+                    elaina.sendMedia(m.chat, anu.caption.profile_hd, '', `🐦 Full Name : ${anu.caption.full_name}\n🐦 User Name : ${anu.caption.user_name}\n🐦 ID ${anu.caption.user_id}\n🐦 Following : ${anu.caption.followers}\n🐦 Followers : ${anu.caption.following}\n🐦 Bussines : ${anu.caption.bussines}\n🐦 Professional : ${anu.caption.profesional}\n🐦 Verified : ${anu.caption.verified}\n🐦 Private : ${anu.caption.private}\n🐦 Bio : ${anu.caption.biography}\n🐦 Bio Url : ${anu.caption.bio_url}`, m)
+		    db.data.users[m.sender].limit -= 1
+                } else if (type.toLowerCase() == 'npm') {
+                    if (!id) return reply(`No Query username, Example : ${prefix + command} npm scrape-primbon`)
+                    let { result: anu } = await fetchJson(api('zenz', '/api/stalker/npm', { query: id }, 'apikey'))
+                    if (anu.status == false) return reply(anu.result.message)
+                    reply(`🐦 Name : ${anu.name}\n🐦 Version : ${Object.keys(anu.versions)}\n🐦 Created : ${tanggal(anu.time.created)}\n🐦 Modified : ${tanggal(anu.time.modified)}\n🐦 Maintainers :\n ${anu.maintainers.map(v => `- ${v.name} : ${v.email}`).join('\n')}\n\n🐦 Description : ${anu.description}\n🐦 Homepage : ${anu.homepage}\n🐦 Keywords : ${anu.keywords}\n🐦 Author : ${anu.author.name}\n🐦 License : ${anu.license}\n🐦 Readme : ${anu.readme}`)
+		    db.data.users[m.sender].limit -= 1
+                } else {
+                    reply(`Example : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
+                }
+            }
+            break
+                
 case 'grupinfo': case 'groupinfo':
-try{
- var pic = await elaina.getProfilePicture(m.chat)
-  } catch {
- var pic = 'https://i.ibb.co/Tq7d7TZ/age-hananta-495-photo.png'
-  }
+try {
+      pic = await elaina.profilePictureUrl(anu.id, 'image')
+       } catch {
+      pic = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+              }
 let ingfo = `*G R O U P  I N F O*\n\n*Name :* ${groupName}\n*ID Group :* ${m.chat}\n*Made :* ${moment(`${groupMetadata.creation}` * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY HH:mm:ss')}\n*Group Owner:* @${groupMetadata.owner.split('@')[0]}\n*Number Of Admins :* ${groupAdmins.length}\n*Number Of Participants :* ${participants.length}\n*Desc :* \n${groupMetadata.desc}`
 ds = await getBuffer(pic)
 elaina.sendMessage(m.chat, { image: ds,caption: ingfo, mentions: [groupMetadata.owner] }, { quoted: m})
@@ -995,9 +1128,9 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-let teks = `[ *👥 Tag All* ]
+let teks = ` *[ TAG ALL]*
  
- *Message : ${q ? q : 'blank'}*\n\n`
+ *⸙ Message :* \n\n${q ? q : 'Blank'}\n\n`
                 for (let mem of participants) {
                 teks += `⭔ @${mem.id.split('@')[0]}\n`
                 }
@@ -1222,7 +1355,7 @@ break
             }
             }
             break
-/*case 'antilink':
+case 'antilink':
 	        if (!m.isGroup) return reply(`This feature only be used in group`)
 			if (!isAdmins) return reply(`This feature could be used by admin only`)
 			if (!isBotAdmins) return reply(`Bot must be admin first`)
@@ -1241,7 +1374,7 @@ break
 					} else if (!q){
  reply(`Pilih Antilink On / Off `)
 					}
-					break */
+					break
 					case 'antiwame': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
@@ -1256,8 +1389,8 @@ break
                 m.reply(`Anti Wa.me is not activated!`)
                 } else {
                  let buttons = [
-                        { buttonId: 'antiwame on', buttonText: { displayText: '⭕On⭕' }, type: 1 },
-                        { buttonId: 'antiwame off', buttonText: { displayText: '❌Off❌' }, type: 1 }
+                        { buttonId: 'antiwame on', buttonText: { displayText: 'On' }, type: 1 },
+                        { buttonId: 'antiwame off', buttonText: { displayText: 'Off' }, type: 1 }
                     ]
                     await elaina.sendButtonText(m.chat, buttons, `Mode Anti Wa.me`, elaina.user.name, m)
                 }
@@ -1678,7 +1811,7 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
             }
             break
             case 'sc': case 'script': case 'sourcecode':{
-            reply('Script Base Original : https://github.com/DikaArdnt/Elaina-Morou\n\nDont Forget Give Star')
+            reply('Script Base Original : https://github.com/DikaArdnt/Hisoka-Morou\n\nDont Forget Give Star')
             }
             break                
             break
@@ -1918,100 +2051,6 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
             elaina.sendMessage(m.chat, {document: xy, mimetype: 'gif', MessageType: 'video/mp4'}, {quoted:m}).catch ((err) => reply(oh))
         }
         break
-		case 'iqra': {
-		oh = `Example : ${prefix + command} 3\n\Available IQRA : 1,2,3,4,5,6`
-		if (!text) throw oh
-		yy = await getBuffer(`https://islamic-api-indonesia.herokuapp.com/api/data/pdf/iqra${text}`)
-		elaina.sendMessage(m.chat, {document: yy, mimetype: 'application/pdf', fileName: `iqra${text}.pdf`}, {quoted:m}).catch ((err) => reply(oh))
-		}
-		break
-		case 'juzamma': {
-		if (args[0] === 'pdf') {
-		replay(mess.wait)
-		elaina.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.pdf'}, mimetype: 'application/pdf', fileName: 'juz-amma-arab-latin-indonesia.pdf'}, {quoted:m})
-		} else if (args[0] === 'docx') {
-		replay(mess.wait)
-		elaina.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.docx'}, mimetype: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', fileName: 'juz-amma-arab-latin-indonesia.docx'}, {quoted:m})
-		} else if (args[0] === 'pptx') {
-		replay(mess.wait)
-		elaina.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.pptx'}, mimetype: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', fileName: 'juz-amma-arab-latin-indonesia.pptx'}, {quoted:m})
-		} else if (args[0] === 'xlsx') {
-		replay(mess.wait)
-		elaina.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.xlsx'}, mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName: 'juz-amma-arab-latin-indonesia.xlsx'}, {quoted:m})
-		} else {
-		reply(`What format do you want? ? Example : ${prefix + command} pdf
-
-Available formats : pdf, docx, pptx, xlsx`)
-		}
-		}
-		break
-		case 'hadith': case 'hadist': {
-		if (!args[0]) throw `Example:
-${prefix + command} bukhari 1
-${prefix + command} abu-daud 1
-
-Options available:
-abu-daud
-1 - 4590
-ahmad
-1 - 26363
-bukhari
-1 - 7008
-darimi
-1 - 3367
-ibu-majah
-1 - 4331
-nasai
-1 - 5662
-malik
-1 - 1594
-muslim
-1 - 5362`
-		if (!args[1]) throw `Which Hadith??\n\nExample:\n${prefix + command} muslim 1`
-		try {
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/json/hadith/${args[0]}`)
-		let { number, arab, id } = res.find(v => v.number == args[1])
-		reply(`No. ${number}
-
-${arab}
-
-${id}`)
-		} catch (e) {
-		reply(`Hadith not found !`)
-		}
-		}
-		break
-		case 'alquran': {
-		if (!args[0]) throw `Example:\n${prefix + command} 1 2\n\nthen the result is surah Al-Fatihah verse 2 along with the audio, and the verse is just 1`
-		if (!args[1]) throw `Example:\n${prefix + command} 1 2\n\nthen the result is surah Al-Fatihah verse 2 along with the audio, and the verse is just 1`
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/quran?surah=${args[0]}&ayat=${args[1]}`)
-		let txt = `*Arab* : ${res.result.data.text.arab}
-*English* : ${res.result.data.translation.en}
-*Indonesia* : ${res.result.data.translation.id}
-
-( Q.S ${res.result.data.surah.name.transliteration.id} : ${res.result.data.number.inSurah} )`
-		reply(txt)
-		elaina.sendMessage(m.chat, {audio: { url: res.result.data.audio.primary }, mimetype: 'audio/mpeg'}, { quoted : m })
-		}
-		break
-		case 'tafsirsurah': {
-		if (!args[0]) throw `Example:\n${prefix + command} 1 2\n\nthen the result is the interpretation of Surah Al-Fatihah verse 2`
-		if (!args[1]) throw `Example:\n${prefix + command} 1 2\n\nthen the result is the interpretation of Surah Al-Fatihah verse 2`
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/quran?surah=${args[0]}&ayat=${args[1]}`)
-		let txt = `「 *Tafsir Surah*  」
-
-*Short* : ${res.result.data.tafsir.id.short}
-
-*Long* : ${res.result.data.tafsir.id.long}
-
-( Q.S ${res.result.data.surah.name.transliteration.id} : ${res.result.data.number.inSurah} )`
-		reply(txt)
-		}
-		break
-/*case 'alkitab':  if(!text) throw `Masukan Search Yang Anda Cari`
-epep = await.fetchJson(`https://melcanz.com/alkitabsearch?q=${text}&apikey=melcantik`)
-break*/
-
 		   case 'bass': case 'blown': case 'deep': case 'earrape': case 'fast': case 'fat': case 'nightcore': case 'reverse': case 'robot': case 'slow': case 'smooth': case 'squirrel':
                 try {
                 let set
@@ -2422,9 +2461,9 @@ let message = await prepareWAMessageMedia({ image: fs.readFileSync('./media/menu
 break
 
 case 'menu': case 'help':{
-    timestampe = speed();
-         latensie = speed() - timestampe
-                anu = `╭─⭓「 WhatsApp Bot 」                
+ timestampe = speed();
+  latensie = speed() - timestampe   
+  anu = `╭─⭓「 WhatsApp Bot 」                
 │• Botname: ${global.botnma}
 │• AuthorBase: DikaArdnt
 │• Rewriter: ${global.ownernma}
@@ -2433,6 +2472,7 @@ case 'menu': case 'help':{
 │ ⫹⫺ Language : Javascript
 │ ⫹⫺ HostName: ${os.hostname()}
 │ ⫹⫺ Platform : ${os.platform()}
+│ ⫹⫺ TotalUser: ${Object.keys(global.db.users).length}
 │ ⫹⫺ Speed: ${latensie.toFixed(4)} miliseconds
 ╰──────⭓`
 let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
@@ -2598,9 +2638,7 @@ let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObje
             }
             break
 case 'grupmenu': case 'groubmenu': {
-	            anu = `
-  *( 📍 )  Groub Menu*  
-  > ${prefix}grouplink
+	            anu = `  > ${prefix}grouplink
   > ${prefix}ephemeral [option]
   > ${prefix}setgrouppp
   > ${prefix}setname [text]
@@ -2612,13 +2650,13 @@ case 'grupmenu': case 'groubmenu': {
   > ${prefix}promote @user
   > ${prefix}demote @user
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 📍 )  Groub Menu* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2626,7 +2664,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2637,9 +2680,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'downloadmenu': {
-	okemenu = `
-  *( 📥 )  Downloader*  
-  > ${prefix}tiktok [url]
+	anu = `  > ${prefix}tiktok [url]
   > ${prefix}tiktokmp3 [url]
   > ${prefix}instagram [url]
   > ${prefix}igs [url]
@@ -2650,13 +2691,13 @@ case 'downloadmenu': {
   > ${prefix}getmusic [query]
   > ${prefix}getvideo [query
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: okemenu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 📥 )  Downloader* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2664,7 +2705,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2673,11 +2719,9 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                 }), { userJid: m.chat })
                 elaina.relayMessage(m.chat, template.message, { messageId: template.key.id })
             }
-            break 
+break
             case 'searchmenu': {
-            	anu = `
-  *( 🔎 )  Searching*  
-  > ${prefix}play [query]
+            	anu = `  > ${prefix}play [query]
   > ${prefix}yts [query]
   > ${prefix}google [query]
   > ${prefix}gimage [query]
@@ -2686,13 +2730,13 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
   > ${prefix}wikimedia [query]
   > ${prefix}ytsearch [query]
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 🔎 )  Searching* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2700,7 +2744,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2711,19 +2760,17 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'randommenu': {
-	anu = `
-  *( 🥎 )  Random* 
-  > ${prefix}coffee
+	anu = `  > ${prefix}coffee
   > ${prefix}ppcp
   > ${prefix}quoteanime
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 🥎 )  Random* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2731,7 +2778,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2742,9 +2794,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'funmenu': {
-	anu = `
-  *( 🎲 )  Fun Menu*  
-  > ${prefix}family100
+	anu = `  > ${prefix}family100
   > ${prefix}math [mode] 
   > ${prefix}jadian
   > ${prefix}jodohku
@@ -2757,13 +2807,13 @@ case 'funmenu': {
   > ${prefix}badut
   > ${prefix}sadboy
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 🎲 )  Fun Menu* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2771,41 +2821,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
-                                    id: `${prefix}owner`
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
                                 }
-                            }]
-                        }
-                    }
-                }), { userJid: m.chat })
-                elaina.relayMessage(m.chat, template.message, { messageId: template.key.id })
-            }
-break
-case 'religionmenukdksoejdjj': {
-	anu = `
-  *( 🛐 )  Religion*
-
-  > ${prefix}iqra
-  > ${prefix}hadith
-  > ${prefix}alquran
-  > ${prefix}juzamma
-  > ${prefix}tafsirsurah
-`  
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
-     const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
-         hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
-                            hydratedButtons: [{
-                                urlButton: {
-                                    displayText: 'Website',
-                                    url: 'https://s.id/Skylarkaf'
-                                }
-                            }, {
+                               }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2816,9 +2837,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'convertmenu': {
-	anu = `
-  *( ♻️ )  Converter*  
-  > ${prefix}toimage
+	anu = `    > ${prefix}toimage
   > ${prefix}sticker
   > ${prefix}emojimix
   > ${prefix}tovideo
@@ -2838,13 +2857,13 @@ case 'convertmenu': {
   > ${prefix}slow
   > ${prefix}squirrel
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( ♻️ )  Converter* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2852,7 +2871,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2863,9 +2887,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'aboutbotmenu': {
-	anu = `
-  *( 📌 )  About Bot*
-  > ${prefix}ping
+	anu = `  > ${prefix}ping
   > ${prefix}owner
   > ${prefix}donate
   > ${prefix}menu / ${prefix}help / ${prefix}?
@@ -2877,13 +2899,13 @@ case 'aboutbotmenu': {
   > ${prefix}listonline
   > ${prefix}report (report bug to owner)
   `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 📌 )  About Bot* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2891,7 +2913,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2902,9 +2929,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'databasemenu': {
-	anu = `
- *( 🖇 )  Database*  
-  > ${prefix}setbudy
+	anu = `  > ${prefix}setbudy
   > ${prefix}listbudy
   > ${prefix}delbudy
   > ${prefix}lockbudy
@@ -2913,13 +2938,13 @@ case 'databasemenu': {
   > ${prefix}getmsg
   > ${prefix}delmsg
   `
-  let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 🖇 )  Database* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2927,7 +2952,12 @@ case 'databasemenu': {
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2938,19 +2968,17 @@ case 'databasemenu': {
             }
 break
 case 'anonymouschatmenu': {
-	anu = `
-  *( 👻 )  Main Menu*	
-  > ${prefix}start ( Start Chat )
+	anu = `  > ${prefix}start ( Start Chat )
   > ${prefix}next ( Next user )
   > ${prefix}stop ( stop Anonymous chat )
 	`
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 👻 )  Anonymous* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2958,7 +2986,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2969,18 +3002,16 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
 case 'sistemmenu': {
-	anu = `
-  *( 🎯 )  Option*	
-  > ${prefix}mute On/Off
+	anu = `    > ${prefix}mute On/Off
   > ${prefix}antiwame On/Off
 `
-let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 🎯 )  Option* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2988,7 +3019,12 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
@@ -2999,9 +3035,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
             }
 break
   case 'ownermenu': {
-  	anu = `
-  *( 👑 )  Owner Menu*  
-  > ${prefix}chat [option]
+  	anu = `  > ${prefix}chat [option]
   > ${prefix}join [link]
   > ${prefix}leave
   > ${prefix}setbotpp
@@ -3009,14 +3043,14 @@ break
   > ${prefix}unblock @user
   > ${prefix}bcgroup
   > ${prefix}bcall
-  `
-    let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
+`
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/3W8EqNAlcH.jpg`)}, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-      templateMessage: {
+     templateMessage: {
          hydratedTemplate: {
-           videoMessage: message.videoMessage,
-           hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+           imageMessage: message.imageMessage,
+           hydratedContentText: ` *( 👑 )  Owner Menu* `,
+           hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -3024,7 +3058,12 @@ break
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Owner Bot',
+                                    displayText: 'Speed',
+                                    id: `${prefix}ping`
+                                }
+                               }, {
+                                quickReplyButton: {
+                                    displayText: 'Owner',
                                     id: `${prefix}owner`
                                 }
                             }]
