@@ -192,7 +192,7 @@ return dDisplay + hDisplay + mDisplay + sDisplay;
         }
         
         const replay = (teks) => {
-            elaina.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `Website`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./Media/reply.jpg`),"sourceUrl": "https://skylarkaf.github.io/"}}}, { quoted: m})
+            elaina.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `${time}`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./Media/reply.jpg`),"sourceUrl": "https://skylarkaf.github.io/"}}}, { quoted: m})
         }
 try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -1708,7 +1708,7 @@ case 'antilink':
 
 
 	    case 'play': case 'ytplay': {
-                if (!text) throw `Example : ${prefix + command} bts boy with luv`
+                if (!text) throw `Example : ${prefix + command} Clarity`
                 let yts = require("yt-search")
                 let search = await yts(text)
                 let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
@@ -1738,11 +1738,11 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
                             }, {
                                 quickReplyButton: {
                                     displayText: 'Audio',
-                                    id: `ytmp3 ${anu.url} 320kbps`
+                                    id: `${prefix}ytmp3 ${anu.url} 320kbps`
                                     }
                                 },{quickReplyButton: {
                                     displayText: 'VIdeo',
-                                    id: `ytmp4 ${anu.url} 360p`
+                                    id: `${prefix}ytmp4 ${anu.url} 360p`
                                 }
                             }]
                         }
@@ -1811,7 +1811,7 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
             }
             break
             case 'sc': case 'script': case 'sourcecode':{
-            reply('Script Base Original : https://github.com/DikaArdnt/Hisoka-Morou\n\nDont Forget Give Star')
+            reply('Script Base Original : https://github.com/DikaArdnt/Hisoka-Morou\nEdited Script : https://github.com/SkylarKaf/Elaina-MD\nDont Forget Give Star :)')
             }
             break                
             break
@@ -2480,7 +2480,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
       templateMessage: {
          hydratedTemplate: {
            videoMessage: message.videoMessage,
-           hydratedContentText: text.trim(),
+           hydratedContentText: ``,
                hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
@@ -2490,7 +2490,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
                             }, {
                             	urlButton: {
                                 displayText: 'Source Code',
-                                    url: 'https://github.com/koleksibot/whitehatbot-md'
+                                    url: 'https://github.com/DikaArdnt/Hisoka-Morou'
                                 }
                             }, {
                                 quickReplyButton: {
