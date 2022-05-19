@@ -1,12 +1,3 @@
-/*
-
-cr: asta by nexusNw inc.
-
-recode: @skylarkaf_
-
-*/
-
-
 const fs = require('fs')
 const chalk = require('chalk')
 global.APIs = {
@@ -42,9 +33,18 @@ global.mess = {
     wait: 'Process...',
     endLimit: 'Your Daily Limit Has Expired, The Limit Will Be Reset Every 12 Hours',
 }
-global.limitawal = {
-    premium: "Infinity", //premium user limit
-    free: 29292929 //free user limit
+    global.limitawal = {
+    premium: "Infinity",
+    free: 7777777,
+    monayawal: 1000
+}
+   global.rpg = {
+   darahawal: 100,
+   besiawal: 5,
+   goldawal: 1,
+   emeraldawal: 1,
+   umpanawal: 1,
+   potionawal: 1
 }
 
 let file = require.resolve(__filename)
@@ -54,3 +54,4 @@ fs.watchFile(file, () => {
 	delete require.cache[file]
 	require(file)
 })
+
