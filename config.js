@@ -5,7 +5,7 @@ global.APIs = {
 }
 
 global.APIKeys = {
-	'https://zenzapi.xyz': '2e99dd9fdd',
+	'https://zenzapi.xyz': 'your api',
 }
 
 global.gifmp4 = "https://uploader.caliph.my.id/file/BrHI7RTQI2.mp4"
