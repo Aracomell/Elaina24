@@ -187,8 +187,12 @@ var sDisplay = s > 0 ? s + (s == 1 ? " second" : " Second") : "";
 return dDisplay + hDisplay + mDisplay + sDisplay;
 }	
 //[target]\\
-	const reply = (teks) => {
-            elaina.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": ` Join Bot's Official`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./Media/elaina.jpg`),"sourceUrl": "https://chat.whatsapp.com/KGScA25PeRC9Z8qSnqLXdy"}}}, { quoted: m})
+     	const reply = (teks) => {
+            elaina.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `Join Grub Kami !`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./Media/elaina.jpg`),"sourceUrl": "https://chat.whatsapp.com/KGScA25PeRC9Z8qSnqLXdy"}}}, { quoted: m})
+        }
+        
+        const replySc = (teks) => {
+            elaina.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `Copas? Kasih Cr!`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./Media/github.jpg`),"sourceUrl": "https://github.com/SkylarKaf"}}}, { quoted: m})
         }
         
         const replay = (teks) => {
@@ -1511,7 +1515,7 @@ case 'antilink':
                     elaina.sendText(m.chat, 'Online List:\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
              }
              break
-            case 'sticker': case 's': case 'stiker': case 'stickergif': case 'sgif': {
+            case 'sticker': case 's': case 'stiker': case 'stickergif': case 'sgif': case 'colong': {
             if (!quoted) throw `Reply Video/Image With Caption ${prefix + command}`
             replay(mess.wait)
                     if (/image/.test(mime)) {
@@ -1693,7 +1697,7 @@ case 'antilink':
             video: { url: data.nowm },
             caption: `Result from ${args[0]}`,
             buttons: [{buttonId: `${prefix}ttaudio ${args[0]} ${m.sender}`, buttonText: { displayText: "Get Audio" }, type: 1 }],
-            footer: "You can change it to Audio, Click the button below to change"
+            footer: "You can change it to Audio, Click button to change"
             }, { quoted: m })
             })
             }
@@ -1713,15 +1717,15 @@ case 'antilink':
                 let search = await yts(text)
                 let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
                     ngen = `
-⭔ Title : ${anu.title}
-⭔ Ext : Search
-⭔ ID : ${anu.videoId}
-⭔ Duration : ${anu.timestamp}
-⭔ Viewers : ${anu.views}
-⭔ Uploaded : ${anu.ago}
-⭔ Author : ${anu.author.name}
-⭔ Channel : ${anu.author.url}
-⭔ Description : ${anu.description}
+•︎ Title : ${anu.title}
+• Ext : Search
+• ID : ${anu.videoId}
+• Duration : ${anu.timestamp}
+• Viewers : ${anu.views}
+• Uploaded : ${anu.ago}
+• Author : ${anu.author.name}
+• Channel : ${anu.author.url}
+• Description : ${anu.description}
 `
 message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { upload:   elaina.waUploadToServer })
                 template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
@@ -1811,7 +1815,7 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
             }
             break
             case 'sc': case 'script': case 'sourcecode':{
-            reply('Script Base Original : https://github.com/DikaArdnt/Hisoka-Morou\nEdited Script : https://github.com/SkylarKaf/Elaina-MD\nDont Forget Give Star :)')
+            replySc('• Script Base Original :\nhttps://github.com/DikaArdnt/Hisoka-Morou\n\n• Edited Script :\n https://github.com/SkylarKaf/Elaina-MD\nDont Forget Give Star :)')
             }
             break                
             break
@@ -2371,7 +2375,7 @@ let message = await prepareWAMessageMedia({ image: fs.readFileSync('./media/menu
          hydratedTemplate: {
            imageMessage: message.imageMessage,
            hydratedContentText: anu,
-           hydratedFooterText: ` ⫹⫺ HostName: ${os.hostname()}\n ⫹⫺ Platform : ${os.platform()}`,
+           hydratedFooterText: ` ⫹⫺ HostName: ${os.hostname()}\n ⫹⫺ Platform : ${os.platform()}\n ⫹⫺ TotalUser: ${Object.keys(global.db.users).length}\n ⫹⫺ Speed: ${latensie.toFixed(4)} miliseconds`,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -2480,7 +2484,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
       templateMessage: {
          hydratedTemplate: {
            videoMessage: message.videoMessage,
-           hydratedContentText: ``,
+           hydratedContentText: ` *• Information* `,
                hydratedFooterText: anu,
                             hydratedButtons: [{
                                 urlButton: {
@@ -2525,11 +2529,11 @@ let sks = `
 *│* • Platform: ${os.platform()}
 *│* • Speed: ${latensie.toFixed(4)} miliseconds
 *│* • Runtime: ${runtime(process.uptime())}
-*├──「 TimeZone 」*
+*│* • ServerTime: ${time}
+*├──「 IndoTime 」*
 *│* • Wit: ${wit}
 *│* • Wita: ${wita}
 *│* • Wib: ${wib}
-*│* • ServerTime: ${time}
 *└───────⭓*\n`
 let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({
    listMessage :{
@@ -2537,7 +2541,7 @@ let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObje
 
                     description: sks,
                     buttonText: "MENU",
-                    footerText: "@skylarkaf",
+                    footerText: "Pls don't spam ~skylarkaf",
                     listType: "SINGLE_SELECT",
                     sections: [{
 								"title": "All Features Bot",
@@ -3176,7 +3180,7 @@ break
   > ${prefix}getmsg
   > ${prefix}delmsg
   
-  *( 👻 )  Main Menu*	
+  *( 👻 )  Anonymous*	
   > ${prefix}start ( Start Chat )
   > ${prefix}next ( Next user )
   > ${prefix}stop ( stop Anonymous chat )
@@ -3193,7 +3197,6 @@ break
   > ${prefix}block @user
   > ${prefix}unblock @user
   > ${prefix}bcgroup
-  > ${prefix}bcall
 `
 let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4), gifPlayback: true }, { upload: elaina.waUploadToServer })
      const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
@@ -3201,7 +3204,7 @@ let message = await prepareWAMessageMedia({ video: await getBuffer(global.gifmp4
          hydratedTemplate: {
            videoMessage: message.videoMessage,
            hydratedContentText: anu,
-               hydratedFooterText: `if you find bug pls report it to owner`,
+               hydratedFooterText: `if you find bug pls report it to owner, Ty :)`,
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Website',
@@ -3234,9 +3237,6 @@ https://github.com/DikaArdnt
 
 • SkylarKaf
 https://github.com/SkylarKaf
-
-• nexusNw
-https://github.com/nexusNw
 
 • tahaluindo
 https://github.com/tahaluindo
